@@ -28,6 +28,19 @@ def knight_graph(board_size):
                 kt_graph.add_edge(node_id, other_node_id)
     return kt_graph
 
+def order_by_avail(n):
+    """Sort the neighbors list by the number of unvisited neighbors each neighbor has."""
+    res_list = []
+    for v in n.get_neighbors():
+        if v.color == "white":
+            c = 0
+            for w in v.get_neighbors():
+                if w.color == "white":
+                    c = c + 1
+            res_list.append((c, v))
+    res_list.sort(key=lambda x: x[0])
+    return [y[1] for y in res_list]
+
 def knight_tour(n, path, u, limit):
     """Create a knight's tour of a graph containing Vertex u.
     Parameters: n: current path length
@@ -37,7 +50,7 @@ def knight_tour(n, path, u, limit):
     u.color = "gray"
     path.append(u)
     if n < limit:
-        neighbors = sorted(list(u.get_neighbors()))
+        neighbors = order_by_avail(u)
         i = 0
         done = False
         while i < len(neighbors) and not done:
@@ -70,8 +83,9 @@ def main(args):
     if not done:
         print('Failed.')
     else:
-        print(path)
-    
+        print("Path:")
+        for v in path:
+            print(v)
 
     return 0
 
