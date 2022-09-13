@@ -1,8 +1,16 @@
-from Vertex import Vertex
-from MR_Graph import Graph
+#from Vertex import Vertex
+#from MR_Graph import Graph
+from pythonds3.graphs import Vertex, Graph
+
+class GraphPlus(Graph):
+    """pythonds3 Graph class with additions."""
+    def add2WayEdge(self, fro:Vertex, to:Vertex, weight:int = 0) -> None:
+        """Add a 2-way edge to the graph."""
+        self.add_edge(fro, to, weight)
+        self.add_edge(to, fro, weight)
 
 def makeSCInterstates():
-    g = Graph()
+    g = GraphPlus()
     g.add2WayEdge('SPB', 'AVL', 70)
     g.add2WayEdge('SPB', 'GVL', 30)
     g.add2WayEdge('SPB', 'CLN', 36)
@@ -24,7 +32,19 @@ def makeSCInterstates():
 def main():
     g = makeSCInterstates()
     for v in g:
-        print(v)
+        print(v.get_key(), end=': ')
+        for neighbor in v.get_neighbors():
+            print(neighbor.get_key(), end=' ')
+        print()
+    print()
+
+    g.dijkstra(g.get_vertex('SPB'))
+    for v in g:
+        print(v.get_key(), v.get_distance(), end=': ')
+        if v.get_previous() is not None:
+            print(v.get_previous().get_key(), end=' ')
+        print()
+
     return 0
 
 if __name__ == '__main__':
