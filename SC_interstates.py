@@ -1,5 +1,4 @@
-#from Vertex import Vertex
-#from MR_Graph import Graph
+from pythonds3.basic import Stack
 from pythonds3.graphs import Vertex, Graph
 
 class GraphPlus(Graph):
@@ -29,21 +28,44 @@ def makeSCInterstates():
     g.add2WayEdge('FLO', 'FAY', 88)    
     return g
 
+def print_path(v: Vertex) -> None:
+    """Print out the shortest path from the starting vertex to V."""
+    # Use a Stack
+    path: Stack = Stack()
+    # Don't push the first node onto the stack, because it gets special treatment
+    current: Vertex = v
+    while current.get_previous() is not None:
+        current = current.get_previous()
+        path.push(current)
+    # Print the nodes on the Stack
+    while not path.is_empty():
+        current = path.pop()
+        print('{0} ({1}) \u2192'.format(current.get_key(), current.get_distance()),
+                end=' ')
+    # Print the original v    
+    print('{0} ({1})'.format(v.get_key(), v.get_distance()))
+
+def print_path_recursively(v: Vertex) -> None:
+    """Print out a path, except the last node.  Do it recursively."""
+    if v.get_previous() is not None:
+        print_path_recursively(v.get_previous())
+        print('\u2192', end=' ')
+    print('{0} ({1})'.format(v.get_key(), v.get_distance()), end=' ')
+
 def main():
     g = makeSCInterstates()
-    for v in g:
-        print(v.get_key(), end=': ')
-        for neighbor in v.get_neighbors():
-            print(neighbor.get_key(), end=' ')
-        print()
-    print()
+    # for v in g:
+    #     print(v.get_key(), end=': ')
+    #     for neighbor in v.get_neighbors():
+    #         print(neighbor.get_key(), end=' ')
+    #     print()
+    # print()
 
     g.dijkstra(g.get_vertex('SPB'))
     for v in g:
-        print(v.get_key(), v.get_distance(), end=': ')
-        if v.get_previous() is not None:
-            print(v.get_previous().get_key(), end=' ')
+        print_path_recursively(v)
         print()
+        #print_path(v)
 
     return 0
 
