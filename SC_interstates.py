@@ -27,7 +27,7 @@ def main():
 
     #g.dijkstra(g.get_vertex('SPB'))
     g.prim(g.get_vertex('SPB'))
-    g.print_graph()
+    g.print_all_paths()
 
     return 0
 

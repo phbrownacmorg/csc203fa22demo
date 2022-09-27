@@ -1,8 +1,8 @@
-from pythonds3.graphs import Graph
+from GraphPlus import GraphPlus
 
 def make_graph():
     "Make the graph from section 7.18 of Miller & Ranum."
-    g = Graph()
+    g = GraphPlus()
     g.add_edge('A', 'B')
     g.add_edge('B', 'C')
     g.add_edge('B', 'E')
@@ -20,7 +20,7 @@ def make_graph():
 
 def transpose(g):
     """Calculate and return the transpose of the given graph G.  G is not changed."""
-    gT = Graph()
+    gT = GraphPlus()
     for v in g:
         for to_v in v.get_neighbors():
             gT.add_edge(to_v.get_key(), v.get_key())

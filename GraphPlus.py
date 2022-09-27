@@ -32,10 +32,15 @@ class GraphPlus(Graph):
             print('\u2192', end=' ')
         print('{0} ({1})'.format(v.get_key(), v.get_distance()), end=' ')
 
-    def print_graph(self) -> None:
+    def print_all_paths(self) -> None:
         """Print out the graph by printing the path for each vertex."""
         for v in self:
             self.print_path(v)
+
+    def print_adjacency_lists(self) -> None:
+        """Print out all the vertices, with their neighbor lists."""
+        for v in self: # type: Vertex
+            print(v.get_key(), ':', [x.get_key() for x in v.get_neighbors()])
 
     def reset(self) -> None:
         """Reset the graph to its initial tate, before any algorithms
