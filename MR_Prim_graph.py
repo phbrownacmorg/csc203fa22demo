@@ -17,7 +17,7 @@ def make_Prim_graph() -> GraphPlus:
 def main():
     g: GraphPlus = make_Prim_graph()
     g.prim(g.get_vertex('A'))
-    g.print_graph()
+    g.print_all_paths()
     return 0
 
 

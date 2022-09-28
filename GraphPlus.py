@@ -1,5 +1,6 @@
 from pythonds3.basic import Stack
 from pythonds3.graphs import Vertex, Graph
+import sys
 
 class GraphPlus(Graph):
     """pythonds3 Graph class with additions."""
@@ -37,17 +38,25 @@ class GraphPlus(Graph):
         for v in self:
             self.print_path(v)
 
+    def print_vertices(self) -> None:
+        """Print out the graph without reference to the paths, by printing
+        every vertex in the graph."""
+        print(f"{'Key':^8}|{'Color':^8}|{'Distance':^8}|{'DiscTime':^8}|{'ClosTime':^8}| {'Previous'}")
+        for v in self:
+            print(v)
+
     def print_adjacency_lists(self) -> None:
         """Print out all the vertices, with their neighbor lists."""
         for v in self: # type: Vertex
             print(v.get_key(), ':', [x.get_key() for x in v.get_neighbors()])
 
     def reset(self) -> None:
-        """Reset the graph to its initial tate, before any algorithms
+        """Reset the graph to its initial state, before any algorithms
         were run on it."""
+        self._time = 0
         for v in self:
             v.set_color('white')
-            v.set_distance(0)
+            v.set_distance(sys.maxsize)
             v.set_previous(None)
             v.set_discovery_time(0)
             v.set_closing_time(0)
