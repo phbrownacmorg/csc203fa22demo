@@ -50,6 +50,32 @@ class GraphPlus(Graph):
         for v in self: # type: Vertex
             print(v.get_key(), ':', [x.get_key() for x in v.get_neighbors()])
 
+    def print_all_distances(self) -> None:
+        """Print the distances between each pair of nodes, as an adjacency
+        matrix.  The 'from' nodes are on the left, and the 'to' nodes are
+        across the top."""
+        COL_WIDTH: int = 6
+        fmt_str: str = '|{0:^' + str(COL_WIDTH) + '}'
+
+        # Print top row
+        print(' ' * COL_WIDTH, end='')
+        for v in self:
+            print(fmt_str.format(v.get_key()), end='')
+        print()
+
+        for v in self:
+            print(v.get_key(), end="")
+            self.reset()
+            self.bfs(v)
+            for v2 in self:
+                distance: int = v2.get_distance()
+                TOO_FAR = 10 ** COL_WIDTH
+                if distance >= TOO_FAR:
+                    print(fmt_str.format('\u221e'), end='')
+                else:
+                    print(fmt_str.format(distance), end='')
+            print()
+
     def reset(self) -> None:
         """Reset the graph to its initial state, before any algorithms
         were run on it."""

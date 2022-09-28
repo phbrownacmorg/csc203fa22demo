@@ -1,7 +1,6 @@
 from pythonds3.graphs import Vertex
 from GraphPlus import GraphPlus
-from SC_interstates import makeSCInterstates
-import scc
+import graphmaker
 
 def toposort(g: GraphPlus) -> list[Vertex]:
     """Perform a topological sort on the given graph G.
@@ -20,8 +19,8 @@ def toposort(g: GraphPlus) -> list[Vertex]:
 
 
 def main(args: list[str]) -> int:
-    #g: GraphPlus = makeSCInterstates()
-    g: GraphPlus = scc.make_graph()
+    #g: GraphPlus = graphmaker.makeSCInterstates()
+    g: GraphPlus = graphmaker.make_graph_7_18()
     g.print_adjacency_lists()
 
     vlist: list[Vertex] = toposort(g)
