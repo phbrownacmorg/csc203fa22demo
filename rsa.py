@@ -46,6 +46,7 @@ def chunks_to_str(chunk_list: List[int], chunk_size: int) -> str:
     hstring = "".join(hex_list)
     msg_array = bytearray.fromhex(hstring)
     return msg_array.decode("utf-8")
+    # STILL fails with error "invalid start byte"
 
 def modexp(x: int, n: int, p: int) -> int:
     """Calculate and return x ** p % n."""
