@@ -87,7 +87,7 @@ class AVLTree(BST[T]):
 
 
     def _rotate_left(self) -> None:
-        """Rotate the tree left to rebalance.  The node *object* that starts as the root will remain as the root, with appropriate copying to produce the effect of a classic rotation.  This means that no references outside the rotation are affected.  In particular, rotations can onvolve the root of the tree."""
+        """Rotate the tree left to rebalance.  The node *object* that starts as the root will remain as the root, with appropriate copying to produce the effect of a classic rotation.  This means that no references outside the rotation are affected.  In particular, rotations can involve the root of the tree."""
         # Pre:
         assert self.hasRightChild()
         rot_child: AVLTree[T] = self.rightChild() # new_root in Miller & Ranum
