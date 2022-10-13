@@ -45,20 +45,20 @@ class TestAVLTree(unittest.TestCase):
         self.assertEqual(self._1node._balance_factor, 0)
 
         self.assertEqual(self._2nodesL._balance_factor, 1)
-        self.assertEqual(self._2nodesL.leftChild()._balance_factor, 0)
+        self.assertEqual(self._2nodesL.leftChild()._balance_factor, 0) # type: ignore
         
         self.assertEqual(self._2nodesR._balance_factor, -1)
-        self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0)
+        self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0) # type: ignore
 
         self.assertEqual(self._3nodes._balance_factor, 0)
-        self.assertEqual(self._3nodes.leftChild()._balance_factor, 0)
-        self.assertEqual(self._3nodes.rightChild()._balance_factor, 0)
+        self.assertEqual(self._3nodes.leftChild()._balance_factor, 0) # type: ignore
+        self.assertEqual(self._3nodes.rightChild()._balance_factor, 0) # type: ignore
 
         self.assertEqual(self._5nodes._balance_factor, 0)
-        self.assertEqual(self._5nodes.leftChild()._balance_factor, 1)
-        self.assertEqual(self._5nodes.rightChild()._balance_factor, -1)
-        self.assertEqual(self._5nodes.leftChild().leftChild()._balance_factor, 0)
-        self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0)
+        self.assertEqual(self._5nodes.leftChild()._balance_factor, 1) # type: ignore
+        self.assertEqual(self._5nodes.rightChild()._balance_factor, -1) # type: ignore
+        self.assertEqual(self._5nodes.leftChild().leftChild()._balance_factor, 0) # type: ignore
+        self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0) # type: ignore
 
         self.assertEqual(self._10nodes._balance_factor, 0)
 
@@ -67,38 +67,38 @@ class TestAVLTree(unittest.TestCase):
         self.assertEqual(self._2nodesR.data(), 47)
         self.assertEqual(self._2nodesR._balance_factor, 0)
         self.assertEqual(self._2nodesR.leftChild().data(), 34)
-        self.assertEqual(self._2nodesR.leftChild()._balance_factor, 0)
+        self.assertEqual(self._2nodesR.leftChild()._balance_factor, 0) # type: ignore
         self.assertEqual(self._2nodesR.rightChild().data(), 70)
-        self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0)
+        self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0) # type: ignore
 
         self._5nodes.add(76) # Force a left rotation
         self.assertEqual(self._5nodes.data(), 34)
         self.assertEqual(self._5nodes._balance_factor, 0)
         self.assertEqual(self._5nodes.rightChild().data(), 70)
-        self.assertEqual(self._5nodes.rightChild()._balance_factor, 0)
+        self.assertEqual(self._5nodes.rightChild()._balance_factor, 0) # type: ignore
         self.assertEqual(self._5nodes.rightChild().rightChild().data(), 76)
-        self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0)
+        self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0) # type: ignore
         self.assertEqual(self._5nodes.rightChild().leftChild().data(), 47)
-        self.assertEqual(self._5nodes.rightChild().leftChild()._balance_factor, 0)
+        self.assertEqual(self._5nodes.rightChild().leftChild()._balance_factor, 0) # type: ignore
 
     def test_rotR(self) -> None:
         self._2nodesL.add(6) # Force a right rotation
-        self.assertEqual(self._2nodesR.data(), 31)
-        self.assertEqual(self._2nodesR._balance_factor, 0)
-        self.assertEqual(self._2nodesR.leftChild().data(), 6)
-        self.assertEqual(self._2nodesR.leftChild()._balance_factor, 0)
-        self.assertEqual(self._2nodesR.rightChild().data(), 34)
-        self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0)
+        self.assertEqual(self._2nodesL.data(), 31)
+        self.assertEqual(self._2nodesL._balance_factor, 0)
+        self.assertEqual(self._2nodesL.leftChild().data(), 6)
+        self.assertEqual(self._2nodesL.leftChild()._balance_factor, 0) # type: ignore
+        self.assertEqual(self._2nodesL.rightChild().data(), 34)
+        self.assertEqual(self._2nodesL.rightChild()._balance_factor, 0) # type: ignore
 
         self._5nodes.add(3) # Force a right rotation
         self.assertEqual(self._5nodes.data(), 34)
         self.assertEqual(self._5nodes._balance_factor, 0)
-        self.assertEqual(self._5nodes.rightChild().data(), 6)
-        self.assertEqual(self._5nodes.rightChild()._balance_factor, 0)
-        self.assertEqual(self._5nodes.rightChild().rightChild().data(), 31)
-        self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0)
-        self.assertEqual(self._5nodes.rightChild().leftChild().data(), 3)
-        self.assertEqual(self._5nodes.rightChild().leftChild()._balance_factor, 0)
+        self.assertEqual(self._5nodes.leftChild().data(), 6)
+        self.assertEqual(self._5nodes.leftChild()._balance_factor, 0) # type: ignore
+        self.assertEqual(self._5nodes.leftChild().rightChild().data(), 31)
+        self.assertEqual(self._5nodes.leftChild().rightChild()._balance_factor, 0) # type: ignore
+        self.assertEqual(self._5nodes.leftChild().leftChild().data(), 3)
+        self.assertEqual(self._5nodes.leftChild().leftChild()._balance_factor, 0) # type: ignore
     
 
         

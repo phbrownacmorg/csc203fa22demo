@@ -28,9 +28,11 @@ class AVLTree(BST[T]):
         if not self.hasLeftChild() and not self.hasRightChild(): # If a leaf
             valid = valid and self._balance_factor == 0
         elif self.hasLeftChild() and not self.hasRightChild(): # Left child, no right child
-            valid = valid and self._balance_factor == (cast(AVLTree[T], self.leftChild())._balance_factor + 1)
+            valid = valid and self._balance_factor == \
+                (cast(AVLTree[T], self.leftChild())._balance_factor + 1)
         elif self.hasRightChild() and not self.hasLeftChild(): # Right child, no left child
-            valid = valid and self._balance_factor == (cast(AVLTree[T], self.rightChild())._balance_factor - 1)
+            valid = valid and self._balance_factor == \
+                (cast(AVLTree[T], self.rightChild())._balance_factor - 1)
         # Two children
         else:
             valid = valid and self._balance_factor == \
@@ -65,7 +67,7 @@ class AVLTree(BST[T]):
         if self._balance_factor < -1 or self._balance_factor > 1:
             self._rebalance()
         elif not self.isRoot():
-            parent: AVLTree[T] = self.parent()
+            parent: AVLTree[T] = cast(AVLTree[T], self.parent())
             if parent.hasLeftChild() and self is parent.leftChild():
                 parent._balance_factor += 1
             else: # self is parent's right child
@@ -77,29 +79,39 @@ class AVLTree(BST[T]):
     def _rebalance(self) -> None:
         """Rebalance the tree at this node."""
         if self._balance_factor < 0:
-            if self.hasRightChild() and self.rightChild()._balance_factor > 0:
-                self.rightChild()._rotate_right()
+            if self.hasRightChild():
+                rightChild: AVLTree[T] = cast(AVLTree[T], self.rightChild())
+                if rightChild._balance_factor > 0:
+                    rightChild._rotate_right()
             self._rotate_left()
         elif self._balance_factor > 0:
-            if self.hasLeftChild() and self.leftChild()._balance_factor < 0:
-                self.leftChild()._rotate_left()
+            if self.hasLeftChild():
+                leftChild: AVLTree[T] = cast(AVLTree[T], self.leftChild())
+                if leftChild._balance_factor < 0:
+                    leftChild._rotate_left()
             self._rotate_right()
 
 
     def _rotate_left(self) -> None:
-        """Rotate the tree left to rebalance.  The node *object* that starts as the root will remain as the root, with appropriate copying to produce the effect of a classic rotation.  This means that no references outside the rotation are affected.  In particular, rotations can involve the root of the tree."""
+        """Rotate the tree left to rebalance.  The node *object* that starts 
+        as the root will remain as the root, with appropriate copying to 
+        produce the effect of a classic rotation.  This means that 
+        no references outside the rotation are affected.  In particular, 
+        rotations can involve the root of the tree."""
         # Pre:
         assert self.hasRightChild()
-        rot_child: AVLTree[T] = self.rightChild() # new_root in Miller & Ranum
+        
+        # new_root in Miller & Ranum
+        rot_child: AVLTree[T] = cast(AVLTree[T], self.rightChild())
 
         # Shift the children
         self._right = rot_child._right
         if self.hasRightChild():
-            self._right._parent = self
+            cast(AVLTree[T], self._right)._parent = self
         rot_child._right = rot_child._left # Parent does not change
         rot_child._left = self._left
         if rot_child.hasLeftChild():
-            rot_child._left._parent = rot_child
+            cast(AVLTree[T], rot_child._left)._parent = rot_child
         self._left = rot_child # rot_child's parent does not change
 
         # Move the data
@@ -116,4 +128,32 @@ class AVLTree(BST[T]):
         #assert self._invariant()
 
     def _rotate_right(self) -> None:
-        pass
+        """Rotate the tree right to rebalance.  The node *object* that starts 
+        as the root will remain as the root, with appropriate copying to 
+        produce the effect of a classic rotation.  This means that 
+        no references outside the rotation are affected.  In particular, 
+        rotations can involve the root of the tree."""
+        # Pre:
+        assert self.hasLeftChild()
+    
+        # new_root in Miller & Ranum
+        rot_child: AVLTree[T] = cast(AVLTree[T], self.leftChild())
+
+        # Shift the children
+        self._left = rot_child._left
+        if self.hasLeftChild():
+            cast(AVLTree[T], self._left)._parent = self
+        rot_child._left = rot_child._right # Parent does not change
+        rot_child._right = self._right
+        if rot_child.hasRightChild():
+            cast(AVLTree[T], rot_child._right)._parent = rot_child
+        self._right = rot_child # rot_child's parent does not change
+
+        # Move the data
+        self._data, rot_child._data = rot_child._data, self._data
+
+        # Update balance factors
+        old_child_bal: int = rot_child._balance_factor
+        rot_child._balance_factor = self._balance_factor - 1 \
+            - max(0, old_child_bal)
+        self._balance_factor = old_child_bal - 1 + min(0, rot_child._balance_factor)
