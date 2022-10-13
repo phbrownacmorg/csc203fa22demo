@@ -74,6 +74,12 @@ class TestBinTree(unittest.TestCase):
         self.assertEqual(len(self._rightOnly), 2)
         self.assertEqual(len(self._full), 15)
 
+    def test_height(self) -> None:
+        self.assertEqual(self._empty.height(), 0)
+        self.assertEqual(self._leftOnly.height(), 2)
+        self.assertEqual(self._rightOnly.height(), 2)
+        self.assertEqual(self._full.height(), 5)
+        
     def test_addLeft(self) -> None:
         self._empty.addLeft('animal')
         self.assertEqual(len(self._empty), 1)

@@ -12,9 +12,10 @@ class BST(BinTree[T]):
     def __init__(self, data: T, parent: Optional['BST[T]'] = None):
         """Create a BST node with the given DATA and PARENT.
         Note that DATA cannot be None."""
-        super().__init__(data)
         self._parent: Optional[BST[T]] = parent
-        assert self._invariant()
+
+        super().__init__(data)
+        # Post: self._invariant() (checked by superclass constructor)
 
     def _invariant(self) -> bool:
         """Class invariant."""

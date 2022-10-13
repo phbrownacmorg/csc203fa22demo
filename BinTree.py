@@ -72,6 +72,23 @@ class BinTree(Generic[T], Sized):
                 result = result + len(self.rightChild())
         return result
 
+    def height(self) -> int:
+        """Find the height of the tree."""
+        result: int = 0 # Handles the case of an empty tree
+        if not self.isEmpty():
+            result = 1 # Current node
+            
+            leftSubtreeHeight: int = 0
+            if self.hasLeftChild():
+                leftSubtreeHeight = self.leftChild().height()
+
+            rightSubtreeHeight: int = 0
+            if self.hasRightChild():
+                rightSubtreeHeight = self.rightChild().height()
+
+            result += max(leftSubtreeHeight, rightSubtreeHeight)
+        return result
+            
     # Mutator methods
 
     def addLeft(self, item: T) -> None:
