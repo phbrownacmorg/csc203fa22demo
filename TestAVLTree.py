@@ -3,25 +3,25 @@ from AVLTree import AVLTree
 
 class TestAVLTree(unittest.TestCase):
     def setUp(self) -> None:
-        self._1node:AVLTree[int] = AVLTree[int](34)     #  34
+        self._1node:AVLTree[str] = AVLTree[str]('F')    #  F
 
-        self._2nodesL: AVLTree[int] = AVLTree[int](34)  #     34
-        self._2nodesL.add(31)                           #    /   
-                                                        #  31
+        self._2nodesL: AVLTree[str] = AVLTree[str]('F') #     F
+        self._2nodesL.add('D')                          #    /   
+                                                        #   D
 
-        self._2nodesR: AVLTree[int] = AVLTree[int](34)  #     34
-        self._2nodesR.add(47)                           #       \
-                                                        #        47
+        self._2nodesR: AVLTree[str] = AVLTree[str]('F') #     F
+        self._2nodesR.add('H')                          #      \
+                                                        #       H
                                                         
-        self._3nodes: AVLTree[int] = AVLTree[int](34)   #     34
-        self._3nodes.add(47)                            #    /  \
-        self._3nodes.add(31)                            #  31    47
+        self._3nodes: AVLTree[str] = AVLTree[str]('F')  #     F
+        self._3nodes.add('H')                           #    / \
+        self._3nodes.add('D')                           #   D   H
 
-        self._5nodes: AVLTree[int] = AVLTree[int](34)   #       34
-        self._5nodes.add(47)                            #      /  \
-        self._5nodes.add(31)                            #    31    47
-        self._5nodes.add(6)                             #   /        \
-        self._5nodes.add(70)                            #  6          70
+        self._5nodes: AVLTree[str] = AVLTree[str]('F')  #       F
+        self._5nodes.add('H')                           #      / \
+        self._5nodes.add('D')                           #     D   H
+        self._5nodes.add('B')                           #    /     \
+        self._5nodes.add('J')                           #   B       J
 
         # Tree from Miller & Ranum 6.17, Fig. 4
         self._3subsL: AVLTree[str] = AVLTree[str]('E')  #       E   
@@ -107,61 +107,61 @@ class TestAVLTree(unittest.TestCase):
         self.assertEqual(self._3subsR.rightChild().rightChild()._balance_factor, 0) # type: ignore
         
     def test_rotL(self) -> None:
-        self._2nodesR.add(70) # Force a left rotation
-        self.assertEqual(self._2nodesR.data(), 47)
+        self._2nodesR.add('J') # Force a left rotation
+        self.assertEqual(self._2nodesR.data(), 'H')
         self.assertEqual(self._2nodesR._balance_factor, 0)
-        self.assertEqual(self._2nodesR.leftChild().data(), 34)
+        self.assertEqual(self._2nodesR.leftChild().data(), 'F')
         self.assertEqual(self._2nodesR.leftChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._2nodesR.rightChild().data(), 70)
+        self.assertEqual(self._2nodesR.rightChild().data(), 'J')
         self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0) # type: ignore
     def test_rotLlow(self) -> None:
-        self._5nodes.add(76) # Force a left rotation
-        self.assertEqual(self._5nodes.data(), 34)
+        self._5nodes.add('K') # Force a left rotation
+        self.assertEqual(self._5nodes.data(), 'F')
         self.assertEqual(self._5nodes._balance_factor, 0)
-        self.assertEqual(self._5nodes.rightChild().data(), 70)
+        self.assertEqual(self._5nodes.rightChild().data(), 'J')
         self.assertEqual(self._5nodes.rightChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._5nodes.rightChild().rightChild().data(), 76)
+        self.assertEqual(self._5nodes.rightChild().rightChild().data(), 'K')
         self.assertEqual(self._5nodes.rightChild().rightChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._5nodes.rightChild().leftChild().data(), 47)
+        self.assertEqual(self._5nodes.rightChild().leftChild().data(), 'H')
         self.assertEqual(self._5nodes.rightChild().leftChild()._balance_factor, 0) # type: ignore
 
     def test_rotR(self) -> None:
-        self._2nodesL.add(6) # Force a right rotation
-        self.assertEqual(self._2nodesL.data(), 31)
+        self._2nodesL.add('B') # Force a right rotation
+        self.assertEqual(self._2nodesL.data(), 'D')
         self.assertEqual(self._2nodesL._balance_factor, 0)
-        self.assertEqual(self._2nodesL.leftChild().data(), 6)
+        self.assertEqual(self._2nodesL.leftChild().data(), 'B')
         self.assertEqual(self._2nodesL.leftChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._2nodesL.rightChild().data(), 34)
+        self.assertEqual(self._2nodesL.rightChild().data(), 'F')
         self.assertEqual(self._2nodesL.rightChild()._balance_factor, 0) # type: ignore
 
     def test_rotRlow(self) -> None:
-        self._5nodes.add(3) # Force a right rotation
-        self.assertEqual(self._5nodes.data(), 34)
+        self._5nodes.add('A') # Force a right rotation
+        self.assertEqual(self._5nodes.data(), 'F')
         self.assertEqual(self._5nodes._balance_factor, 0)
-        self.assertEqual(self._5nodes.leftChild().data(), 6)
+        self.assertEqual(self._5nodes.leftChild().data(), 'B')
         self.assertEqual(self._5nodes.leftChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._5nodes.leftChild().rightChild().data(), 31)
+        self.assertEqual(self._5nodes.leftChild().rightChild().data(), 'D')
         self.assertEqual(self._5nodes.leftChild().rightChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._5nodes.leftChild().leftChild().data(), 3)
+        self.assertEqual(self._5nodes.leftChild().leftChild().data(), 'A')
         self.assertEqual(self._5nodes.leftChild().leftChild()._balance_factor, 0) # type: ignore
     
     def test_rotLR(self) -> None:
         # Left followed by right
-        self._2nodesL.add(32) # Force the double rotation
-        self.assertEqual(self._2nodesL.data(), 32)
+        self._2nodesL.add('E') # Force the double rotation
+        self.assertEqual(self._2nodesL.data(), 'E')
         self.assertEqual(self._2nodesL._balance_factor, 0)
-        self.assertEqual(self._2nodesL.leftChild().data(), 31)
+        self.assertEqual(self._2nodesL.leftChild().data(), 'D')
         self.assertEqual(self._2nodesL.leftChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._2nodesL.rightChild().data(), 34)
+        self.assertEqual(self._2nodesL.rightChild().data(), 'F')
         self.assertEqual(self._2nodesL.rightChild()._balance_factor, 0) # type: ignore
     def test_rotRL(self) -> None:
         # Right followed by left
-        self._2nodesR.add(41)
-        self.assertEqual(self._2nodesR.data(), 41)
+        self._2nodesR.add('G')
+        self.assertEqual(self._2nodesR.data(), 'G')
         self.assertEqual(self._2nodesR._balance_factor, 0)
-        self.assertEqual(self._2nodesR.leftChild().data(), 34)
+        self.assertEqual(self._2nodesR.leftChild().data(), 'F')
         self.assertEqual(self._2nodesR.leftChild()._balance_factor, 0) # type: ignore
-        self.assertEqual(self._2nodesR.rightChild().data(), 47)
+        self.assertEqual(self._2nodesR.rightChild().data(), 'H')
         self.assertEqual(self._2nodesR.rightChild()._balance_factor, 0) # type:         
     def test_rotL_3subs(self) -> None:
         self._3subsR.add('G') # Force the rotation
