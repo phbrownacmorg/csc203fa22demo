@@ -159,6 +159,67 @@ class BST(BinTree[T]):
         # Just do nothing.
         assert self._invariant()
 
+    def _removeLeaf(self) -> None:
+        """Remove this node, in the case that this node is a leaf."""
+        # Pre:
+        assert (not self.hasLeftChild()) and (not self.hasRightChild())
+        if self.isRoot():
+            raise ValueError('Cannot delete the last node in the tree.')
+        elif self == self.parent().leftChild():
+            self.parent()._left = None
+        elif self == self.parent().rightChild():
+            self.parent()._right = None
+        # Make this node the empty tree, so we know not to apply
+        # the postcondition
+        self._data = None
+        # Post
+        assert self._data is None
+        # and no references to the current node remain in the tree
+
+    def _removeParentOfOne(self) -> None:
+        """Remove this node, in the case that this node has one child."""
+        # Pre:
+        assert (self.hasLeftChild() and not self.hasRightChild()) \
+            or (not self.hasLeftChild() and self.hasRightChild())
+        if self.hasLeftChild():
+            child: BinTree[T] = self.leftChild() # Actually a BST
+        else:
+            child = self.rightChild()
+        # Copy the data from the child up to this node
+        self._data = child._data
+
+        self._left = child._left
+        if self._left is not None:
+            cast(BST, self._left)._parent = self
+
+        self._right = child._right
+        if self._right is not None:
+            cast(BST, self._right)._parent = self
+        # Post:
+        assert self.data() == child.data() \
+            and self._left == child._left and self._right == child._right \
+            and ((self._left is None) or (cast(BST[T], self._left).parent() == self)) \
+            and ((self._right is None) or (cast(BST[T], self._right).parent() == self))   
+
+    def _removeThisNode(self) -> None:
+        """Remove the current node from the tree.  Returns None."""
+        # Simple case: this node has no children
+        # Just remove this node (invariant may not hold afterwards)
+        if (not self.hasLeftChild()) and (not self.hasRightChild()):
+            self._removeLeaf()
+        # Slightly less simple case: this node has one child
+        # Copy up this node's child in place of this node
+        elif (not self.hasLeftChild()) or (not self.hasRightChild()):
+            self._removeParentOfOne()
+        # Two children.  This one's complicated.
+        # Copy this node's successor to this node, and remove
+        #     the successor from this node's right subtree
+        else: 
+            successor_data: T = cast(BST, self.findSuccessor()).data()
+            self._data = successor_data
+            # Remove it from the right subtree
+            cast(BST, self.rightChild()).remove(successor_data)
+
     def remove(self, value: T) -> None:
         """Function to remove the given VALUE from the tree, and
         return the root of the resulting tree.  The tricky part here
@@ -177,42 +238,6 @@ class BST(BinTree[T]):
             else: # No subtree, value isn't here
                 raise ValueError('Value ' + str(value) + ' not in tree')
         else: # value == self.data(), remove this node
-            # Simple case: this node has no children
-            # Just remove this node (invariant may not hold afterwards)
-            if (not self.hasLeftChild()) and (not self.hasRightChild()):
-                if self.isRoot():
-                    raise ValueError('Cannot delete the last node in the tree.')
-                elif self == self.parent().leftChild():
-                    self.parent()._left = None
-                elif self == self.parent().rightChild():
-                    self.parent()._right = None
-                # Make this node the empty tree, so we know not to apply
-                # the postcondition
-                self._data = None
-            # Slightly less simple case: this node has one child
-            # Copy up this node's child in place of this node
-            elif (not self.hasLeftChild()) or (not self.hasRightChild()):
-                if self.hasLeftChild():
-                    child: BinTree[T] = self.leftChild() # Actually a BST
-                else:
-                    child = self.rightChild()
-                # Copy the data from the child up to this node
-                self._data = child._data
-
-                self._left = child._left
-                if self._left is not None:
-                    cast(BST, self._left)._parent = self
-
-                self._right = child._right
-                if self._right is not None:
-                    cast(BST, self._right)._parent = self
-            # Two children.  This one's complicated.
-            # Copy this node's successor to this node, and remove
-            #     the successor from this node's right subtree
-            else: 
-                successor_data: T = cast(BST, self.findSuccessor()).data()
-                self._data = successor_data
-                # Remove it from the right subtree
-                cast(BST, self.rightChild()).remove(successor_data)
+            self._removeThisNode()
         # Post:
         assert (self._data is None) or (value not in self and self._invariant())
