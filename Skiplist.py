@@ -6,7 +6,7 @@ from pythonds3.basic import Stack
 #KT = TypeVar('KT') # Key type.  Must be hashable and comparable.
 #VT = TypeVar('VT') # Value type.  Can be anything.
 
-class Skiplist:
+class Skiplist(MutableMapping):
     """Class to represent a skiplist."""
 
     P_INV: int = 2  # 1/P
@@ -111,3 +111,58 @@ class Skiplist:
                 else:
                     next_level = tower.pop()
                     top = top.addLevel(next_level)
+
+    def __setitem__(self, key, value):
+        """Allows insertion into the skiplist using the syntax
+        self[key] = value."""
+        self.insert(key, value)
+
+    def search(self, key):
+        """Searches for an item with key KEY in the list,
+        and return its value.  If nothing in the list has
+        key KEY, raise KeyError."""
+        current = self._head # current node
+        result = None # Return value
+        while current:
+            if (current.next is None) or (current.next.key > key):
+                current = current.down
+            elif (current.next.key < key):
+                current = current.next
+            else: # current.next.key == key
+                result = current.next.data
+                current = None # To exit the loop
+        if result is None:
+            raise KeyError('Key {0} is not in skiplist'.format(key)) 
+        return result
+
+    def __getitem__(self, key):
+        """Allows searching the skiplist using the syntax
+        self[key]."""
+        return self.search(key)
+
+    def delete(self, key):
+        """Deletes the item with key KEY from the skiplist.
+        If no such item exists, raise KeyError."""
+        pass # For HW5, replace with real code
+
+    def __delitem__(self, key):
+        """Allows deletion from the skiplist using
+        square-bracket notation."""
+        self.delete(key)
+
+    def __iter__(self):
+        """Iterator over a Skiplist, using a generator."""
+        current = self._head
+        if self._head is not None:
+            # Go to the bottom level, which has all the values
+            while current.down is not None:
+                current = current.down
+
+            # Go along the bottom level, yielding the key each time.
+            while current.next is not None:
+                current = current.next
+                yield current.key
+                
+    def __len__(self):
+        """Return the length of the Skiplist."""
+        return len(list(iter(self)))
