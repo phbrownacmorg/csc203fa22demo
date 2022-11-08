@@ -157,7 +157,7 @@ class TestSkiplist(unittest.TestCase):
 
                 if i < (levels-1): # top level has only node50
                     self.assertTrue(node50.down is not None)
-                    self.assertTrue(head.down.next.next.next is node50.down)
+                    self.assertTrue(head.down.next.next is node50.down)
                 elif i == (levels-1): # bottom level has both node37 and node50
                     self.assertTrue(node50.down is None)
                     self.assertTrue(node37.down is None)
@@ -176,7 +176,7 @@ class TestSkiplist(unittest.TestCase):
                     self.assertEqual(node6.key, 6)
                     self.assertEqual(node6.data, 'six')
                     self.assertTrue(node6.next is not None)
-                    node37 = head.next
+                    node37 = node6.next
                     self.assertEqual(node37.key, 37)
                     self.assertEqual(node37.data, 'thirty-seven')
                     self.assertTrue(node37.next is None)
@@ -208,8 +208,8 @@ class TestSkiplist(unittest.TestCase):
 
                 if i < (levels-1): # top level has only node50
                     self.assertTrue(node50.down is not None)
-                    self.assertTrue(head.down.next.next.next is node50.down)
-                elif i == (levels-1): # bottom level has both node37 and node50
+                    self.assertTrue(head.down.next.next is node50.down)
+                elif i == (levels-1): # bottom level has both node6 and node50
                     self.assertTrue(node50.down is None)
                     self.assertTrue(node6.down is None)
                     self.assertTrue(head.down is None)
