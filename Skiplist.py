@@ -125,9 +125,9 @@ class Skiplist(MutableMapping):
         result = None # Return value
         while current:
             if (current.next is None) or (current.next.key > key):
-                current = current.down
+                current = current.down # Next level down
             elif (current.next.key < key):
-                current = current.next
+                current = current.next # Move along the current level
             else: # current.next.key == key
                 result = current.next.data
                 current = None # To exit the loop
