@@ -28,10 +28,12 @@ class Matcher:
 
     @staticmethod
     def _find_next_state(pattern, state, symbol) -> int:
+        result = 0
         for i in range(state+1, 0, -1):
-            if (pattern[:state] + symbol)[:-i] == pattern[:i]:
+            if (pattern[:state] + symbol)[-i:] == pattern[:i]:
+                result = i
                 break
-        return i
+        return result
 
     @staticmethod
     def _make_DFA(pattern, alphabet) -> Dict[Tuple[int, str], int]:
