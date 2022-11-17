@@ -55,6 +55,11 @@ class TestMatcher(unittest.TestCase):
         self.assertEqual(self._bookText.find(self._repeatN),
                         Matcher.DFA_matcher(self._repeatN, self._bookText, 'ACGT'))
 
+    def test_KMP_mismatched_links(self):
+        self.assertEqual(Matcher.mismatched_links(self._ACATA),
+                        [0, 0, 1, 1, 2, 1])
+
+
     def test_KMP_present(self):
         self.assertEqual(self._bookText.find(self._ACATA),
                         Matcher.KMP_matcher(self._ACATA, self._bookText))
