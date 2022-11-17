@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 class Matcher:
     """Class to do pattern-matching in strings."""
@@ -49,7 +49,7 @@ class Matcher:
         DFA: Dict[Tuple[int, str], int] = Matcher._make_DFA(pattern, alphabet)
         state: int = 0
         i: int = 0
-        result = -1
+        result: int = -1
         while i < len(text) and state < len(pattern):
             key = (state, text[i])
             state = DFA[key]
@@ -57,3 +57,37 @@ class Matcher:
         if state == len(pattern):
             result = (i - len(pattern))
         return result
+
+    @staticmethod
+    def mismatched_links(pattern: str) -> List[int]:
+        aug_pattern: str = "0" + pattern
+        # Initialize links to all 0's
+        links: List[int] = [0] * len(pattern) 
+        for k in range(2, len(aug_pattern)):
+            s = links[k - 1]
+            while s >= 1:
+                if aug_pattern[s] == aug_pattern[k - 1]:
+                    break
+                else:
+                    s = links[s]
+            links[k] = s + 1
+        return links
+
+    @staticmethod
+    def KMP_matcher(pattern:str, text: str) -> int:
+        mismatched: List[int] = Matcher.mismatched_links(pattern)
+        state: int = 1
+        i: int = 0
+        result: int = -1
+
+        while i < len(text) and state < len(pattern):
+            while (state > 0) and (text[i] != pattern[state-1]):
+                state = mismatched[state]
+            state = state + 1
+            i = i + 1
+        if i == len(pattern):
+            result = (i - state)
+
+
+        return result
+

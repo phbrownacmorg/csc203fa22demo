@@ -55,5 +55,25 @@ class TestMatcher(unittest.TestCase):
         self.assertEqual(self._bookText.find(self._repeatN),
                         Matcher.DFA_matcher(self._repeatN, self._bookText, 'ACGT'))
 
+    def test_KMP_present(self):
+        self.assertEqual(self._bookText.find(self._ACATA),
+                        Matcher.KMP_matcher(self._ACATA, self._bookText))
+        self.assertEqual(self._bookText3.find(self._repeat2),
+                        Matcher.KMP_matcher(self._repeat2, self._bookText3))
+        self.assertEqual(self._bookText.find(self._ACACAT),
+                        Matcher.KMP_matcher(self._ACACAT, self._bookText))
+        self.assertEqual(self._t8a1.find(self._repeatN),
+                        Matcher.KMP_matcher(self._repeatN, self._t8a1))
+
+    def test_KMP_absent(self):
+        self.assertEqual(self._bookText2.find(self._ACATA),
+                        Matcher.KMP_matcher(self._ACATA, self._bookText2))
+        self.assertEqual(self._bookText2.find(self._repeat2),
+                        Matcher.KMP_matcher(self._repeat2, self._bookText2))
+        self.assertEqual(self._bookText3.find(self._ACACAT),
+                        Matcher.KMP_matcher(self._ACACAT, self._bookText3))
+        self.assertEqual(self._bookText.find(self._repeatN),
+                        Matcher.KMP_matcher(self._repeatN, self._bookText))
+
 if __name__ == '__main__':
     unittest.main()
